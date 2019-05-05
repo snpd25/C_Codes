@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct state{
+  int final;
+  int value;
+  char *input_0,*input_1;
+}state;
+
+state* arr[20];
+
+int check(char* bin_str, int count, state* a){
+  int d,yes=0,z;
+
+  if (bin_str[count]=='&amp;#092;&amp;#048;'){
+    return a->final;
+  }
+
+  char temp[20];
+  if (bin_str[count]=='0')
+    strcpy(temp,a->input_0);
+  else
+    strcpy(temp,a->input_1);
+ 
+    if (strcmp("-",temp)==0)
+      return 0;
+    for(d=0;temp[d]!='&amp;#092;&amp;#048;';d++){
+      z=temp[d]-48;
+      yes=check(bin_str, count+1,arr[z])||yes;
+    }
+
+  return yes;
+}
+
+int main(void) {
+  int n,i,j,k,n1,n2,p;
+  char bin_str[20];
+  printf("Enter total number of states\n");
+  scanf("%d",&n);
+
+  for(i=0;i<n;i++){
+    arr[i]=(state*)malloc(sizeof(state));
+  }
+  for(i=0;i<n;i++){
+    arr[i]->value = i;
+    printf("Enter 1 if %d is a final state else 0\n",i);
+    scanf("%d",&arr[i]->final);
+    printf("Enter the no. of next states for %d at input 0\n",i);
+    scanf("%d",&n1);
+    arr[i]->input_0 = (char*)malloc(sizeof(char)*(n1+2));
+    printf("Enter the next states for %d at input 0\n",i);
+    scanf("%s",arr[i]->input_0);
+   
+
+    printf("Enter the no. of next states for %d at input 1\n",i);
+    scanf("%d",&n2);
+    arr[i]->input_1 = (char*)malloc(sizeof(char)*(n2+2));
+    printf("Enter the next states for %d at input 1\n",i);
+    scanf("%s",arr[i]->input_1);
+    }
+  printf("Enter the binary string to be checked\n");
+  scanf("%s",bin_str);
+  printf("%s",bin_str);
+  int count=0,yes=0;
+  yes=check(bin_str,count,arr[0]);
+
+  if (yes==1){
+    printf("The string is acceptable");
+  }else
+  {
+    printf("The string is not acceptable");
+  }
+  
+  return 0;
+}
